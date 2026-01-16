@@ -21,7 +21,8 @@
                         <option value="2">Hard</option>
                         <option value="3">Chimps/Impoppable</option>
                     </select> Difficulty <br></div>
-                <div class="input"><input type="checkbox" id="input-camo"> Camo <br></div>
+                <!--<div class="input"><input type="checkbox" id="input-camo"> Camo <br></div>-->
+                <div class="input"><input type="range" id="input-caltrops" min=0 max=1 step=0.0001> Caltrops modifier <br></div>
                 <h3>Aura/permanent buffs</h3>
                 <div class="input"><select id="input-sun-temple">
                         <option value="0">0 ($0 - $10,000)</option>
@@ -47,31 +48,32 @@
                         <option value="8">8 ($45,001 - $50,000)</option>
                         <option value="9">9 ($50,001 or more)</option>
                     </select> Sun god tier <br></div>
-                <div class="input"><input type="number" id="input-gerry-fire" value = 0> Gerry's fire <br></div>
-                <div class="input"><input type="number" id="input-village-discount" value = 1> Village discount stacks <br></div>
+                <!--<div class="input"><input type="number" id="input-gerry-fire" value = 0> Gerry's fire <br></div>-->
+                <div class="input"><input type="number" id="input-village-discount" value = 1 min=0 max=3> Village discount stacks <br></div>
                 <div class="input"><input type="checkbox" id="input-jungle-drums"> Jungle drums <br></div>
                 <div class="input"><input type="checkbox" id="input-perma-brew"> Perma brew <br></div>
-                <div class="input"><input type="checkbox" id="input-energizer"> Energizer <br></div>
+                <!--<div class="input"><input type="checkbox" id="input-energizer"> Energizer <br></div>
                 <h3>Temporary buffs</h3>
                 <div class="input"><input type="checkbox" id="input-homeland"> Homeland defense <br></div>
                 <div class="input"><input type="checkbox" id="input-cta"> Call to arms <br></div>
-                <div class="input"><input type="checkbox" id="input-grand-sabo"> Grand saboteur ability <br></div>
+                <div class="input"><input type="checkbox" id="input-grand-sabo"> Grand saboteur ability <br></div>-->
                 <h3>Monkey knowledge</h3>
-                <div class="input"><input type="checkbox" id="input-global-ability-cooldowns"> Global ability cooldowns <br></div>
-                <div class="input"><input type="checkbox" id="input-to-arms"> To arms! <br></div>
+                <!--<div class="input"><input type="checkbox" id="input-global-ability-cooldowns"> Global ability cooldowns <br></div>
+                <div class="input"><input type="checkbox" id="input-to-arms"> To arms! <br></div>-->
                 <div class="input"><input type="checkbox" id="input-deadly-tranquility"> Deadly tranquility <br></div>
                 <div class="input"><input type="checkbox" id="input-cheaper-doubles"> Cheaper doubles <br></div>
                 <div class="input"><input type="checkbox" id="input-insider-trades"> Insider trades <br></div>
-                <h3>Debuffs</h3>
+                <!--<h3>Debuffs</h3>
                 <div class="input"><select id="input-glue-strike">
                         <option value="0">none</option>
                         <option value="0">1 0-4-x</option>
                         <option value="1">2 0-4-x</option>
                         <option value="2">1 2-4-x</option>
                         <option value="3">2 2-4-x</option>
-                    </select> Glue strike <br></div>
+                    </select> Glue strike <br></div>-->
                 <div class="input"><input type="checkbox" id="input-embrittlement"> Embrittlement <br></div>
                 <div class="input"><input type="checkbox" id="input-super-brittle"> Super brittle <br></div>
+                <div class="input"><input type="checkbox" id="input-ice-paragon"> Herald of Everfrost <br></div>
                 <div class="input"><input type="checkbox" id="input-cripple"> Cripple moab <br></div>
             </div>
             <div>
@@ -119,10 +121,17 @@
             max_monkeys: 30,
             max_tiers: 200,
             max_cash: 100000,
-            camo: false
+            camo: false,
+            caltrops_modifier: 0.5
         }
-        monkey_knowledge.global_ability_cooldowns = document.getElementById("input-global-ability-cooldowns").checked
-        monkey_knowledge.to_arms = document.getElementById("input-to-arms").checked
+        var debuffs = {
+            embrittlement:false,
+            super_brittle:false,
+            cripple_moab: false,
+            ice_paragon:false
+        }
+        //monkey_knowledge.global_ability_cooldowns = document.getElementById("input-global-ability-cooldowns").checked
+        //monkey_knowledge.to_arms = document.getElementById("input-to-arms").checked
         monkey_knowledge.deadly_tranquility = document.getElementById("input-deadly-tranquility").checked
         monkey_knowledge.cheaper_doubles = document.getElementById("input-cheaper-doubles").checked
         monkey_knowledge.insider_trades = document.getElementById("input-insider-trades").checked
@@ -131,15 +140,21 @@
         permanent_buffs.sun_temple = Number(document.getElementById("input-sun-temple").value)
         permanent_buffs.jungle_drums = document.getElementById("input-jungle-drums").checked
         permanent_buffs.perma_brew = document.getElementById("input-perma-brew").checked
-        permanent_buffs.gerry_fire = Number(document.getElementById("input-gerry-fire").value)
+        //permanent_buffs.gerry_fire = Number(document.getElementById("input-gerry-fire").value)
         permanent_buffs.village_discount = Number(document.getElementById("input-village-discount").value)
+
+        debuffs.embrittlement = document.getElementById("input-embrittlement").checked
+        debuffs.super_brittle = document.getElementById("input-super-brittle").checked
+        debuffs.cripple_moab = document.getElementById("input-cripple").checked
+        debuffs.ice_paragon = document.getElementById("input-ice-paragon").checked
 
         difficulty = Number(document.getElementById("input-difficulty").value)
 
         constraints.max_monkeys = Number(document.getElementById("input-monkeys").value)
         constraints.max_tiers = Number(document.getElementById("input-tiers").value)
         constraints.max_cash = Number(document.getElementById("input-cash").value)
-        constraints.camo = document.getElementById("input-camo").checked
+        constraints.caltrops_modifier = Number(document.getElementById("input-caltrops").value)
+        //constraints.camo = document.getElementById("input-camo").checked
 
         //console.log(constraints, typeof(constraints.max_cash))
 
@@ -294,6 +309,11 @@
             global_buffs.flat_pierce += 3;
             global_buffs.cooldown *= 0.85;
         }
+        global_buffs.flat_damage += debuffs.embrittlement?1:0;
+        global_buffs.flat_damage += debuffs.ice_paragon?10:0;
+        global_buffs.flat_damage += debuffs.super_brittle?4:0;
+        global_buffs.flat_damage += debuffs.cripple_moab?5:0;
+
         for (var shinobi_count = 0; shinobi_count <= constraints.max_monkeys; shinobi_count++) {
             var cash_spent = 0;
             var tier_spent = 0;
@@ -330,7 +350,7 @@
                         var dps = {
                             shinobi: ((shinobi_stats.damage + global_buffs.flat_damage) * (1 / shinobi_stats.cooldown)) * shinobi_count / (shinobi_buff / 0.92) / global_buffs.cooldown,
                             bloonjitsu: ((bloonjitsu_stats.damage + global_buffs.flat_damage) * (1 / bloonjitsu_stats.cooldown) * (bloonjitsu_stats.projectile_count + monkey_knowledge.deadly_tranquility?1:0)) * bloonjitsu_count / shinobi_buff / global_buffs.cooldown,
-                            caltrops: ((caltrop_stats.damage + global_buffs.flat_damage) * (1 / caltrop_stats.cooldown) * (caltrop_stats.pierce * global_buffs.pierce + global_buffs.flat_pierce)) * caltrops_count / shinobi_buff / global_buffs.cooldown,
+                            caltrops: ((caltrop_stats.damage + global_buffs.flat_damage) * (1 / caltrop_stats.cooldown) * (caltrop_stats.pierce * global_buffs.pierce + global_buffs.flat_pierce)) * caltrops_count / shinobi_buff / global_buffs.cooldown * constraints.caltrops_modifier,
                             grandmaster_ninja: ((grandmaster_ninja_stats.damage + global_buffs.flat_damage) * (1 / grandmaster_ninja_stats.cooldown) * (grandmaster_ninja_stats.projectile_count + monkey_knowledge.deadly_tranquility?1:0)) / shinobi_buff * grandmaster_ninja_count / global_buffs.cooldown
                         };
                         //console.log(dps.shinobi, shinobi_count, dps.bloonjitsu, bloonjitsu_count)
@@ -351,7 +371,8 @@
             }
         }
         console.log(output)
-        //console.log(global_buffs)
+        console.log(global_buffs)
+        console.log(constraints)
         document.getElementById("dps-output").innerHTML = Math.round(output.total_dps);
         document.getElementById("cash-output").innerHTML = Math.round(output.cash);
         document.getElementById("tiers-output").innerHTML = Math.round(output.tiers);
