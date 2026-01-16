@@ -1,0 +1,64 @@
+body {
+    font-family: Raleway, Arial, sans-serif;
+    font-feature-settings: "ss09"on;
+}
+
+.root {
+    margin: 30px;
+}
+
+main {
+    top: 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+.section-margin {
+    margin-top: 80px;
+    margin-right: 100px;
+    margin-left: 100px;
+    margin-bottom: 50px;
+    width: 100% - 200px;
+}
+
+.full {
+    width: 100%;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.center-self {
+    margin: 0 auto;
+}
+
+.absolute {
+    position: absolute;
+}
+
+.fill-page {
+    width: 100vw;
+}
+
+.no-margin {
+    margin: 0;
+}
+
+.flex {
+    display: flex;
+}
+
+.flex-col {
+    flex-direction: column;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.default-flex-gap {
+    gap: 40px;
+}
